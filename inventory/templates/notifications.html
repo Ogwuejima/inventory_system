@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notifications</title>
+    <style>
+        .unread { font-weight: bold; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Notifications</h4>
+      </div>
+      <div class="card-body">
+    <a href="{% url 'mark_all_as_read' %}">Mark all as read</a>
+    <ul>
+        {% for n in notifications %}
+        <li class="{% if not n.is_read %}unread{% endif %}">
+            {{ n.message }} - {{ n.created_at|timesince }} ago
+            {% if not n.is_read %}
+            <a href="{% url 'acknowledge_notification' n.id %}">Acknowledge</a>
+            {% endif %}
+        </li>
+        {% empty %}
+        <li>No notifications.</li>
+        {% endfor %}
+    </ul>
+      </div>
+    </div>
+    </div>
+</body>
+</html>
+{% endblock %}

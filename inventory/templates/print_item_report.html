@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory Item Report</title>
+    <style>
+  @media print {
+    body {
+      font-family: "Times New Roman", serif;
+      font-size: 12pt;
+      color: #000;
+    }
+
+    .no-print {
+      display: none !important;
+    }
+
+    .footer, .header {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .stamp {
+      font-weight: bold;
+      border: 2px dashed #000;
+      padding: 10px;
+      width: fit-content;
+      margin: 20px auto 0;
+    }
+
+    .report-section {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #999;
+      padding-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+  }
+
+  /* For screen styling */
+  .no-print {
+    margin-top: 10px;
+  }
+
+  .report-container {
+    max-width: 600px;
+    margin: 0 auto; /* center horizontally */
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  .report-container img {
+    max-width: 100px;
+    margin-bottom: 15px;
+  }
+
+  .report-container h2 {
+    margin-top: 0;
+  }
+
+  .report-container p {
+    margin: 6px 0;
+  }
+
+  .footer {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .footer img {
+    margin-top: 10px;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    margin-top: 15px;
+    border: 1px solid purple;
+    background: #fff;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .btn:hover {
+    background: purple;
+    color: #fff;
+  }
+
+    </style>
+</head>
+<body>
+<div class="report-container">
+    <div class="header">
+  <img src="{% static 'images/logo.png' %}" height="60" alt="Logo">
+  <h2>Inventory Item Report</h2>
+</div>
+
+<div class="report-section">
+  <p><strong>Item Name:</strong> {{ item.name }}</p>
+  <p><strong>Location:</strong> {{ item.location }}</p>
+  <p><strong>Quantity:</strong> {{ request_obj.quantity }}</p>
+  <p><strong>Status:</strong> {{ request_obj.status|title }}</p>
+</div>
+
+<div class="report-section">
+  <p><strong>Requested By:</strong> {{ request_obj.requester.get_full_name }}</p>
+  <p><strong>Request Date:</strong> {{ request_obj.request_date|date:"Y-m-d H:i" }}</p>
+</div>
+
+<div class="report-section">
+  <p><strong>QR Code:</strong></p>
+  <img src="{{ qr_code_url }}" height="100" alt="QR Code">
+</div>
+
+<div class="footer">
+  Approved by:<br><br>
+  {% if request_obj.status == "approved" %}
+    <img src="{% static 'images/approved_signature.png' %}" height="50"><br>
+    <strong>{{ request_obj.approved_by.get_full_name }}</strong><br>
+    (Inventory Manager)
+  {% elif request_obj.status == "rejected" %}
+    <strong style="color: red;">REJECTED</strong><br>
+    (Request was not approved)
+  {% else %}
+    ____________<br>
+    (Pending Approval)
+  {% endif %}
+</div>
+
+<div class="stamp">Official Stamp</div>
+
+<!-- Only shows on screen -->
+<div class="no-print text-center">
+  <button onclick="window.print()" class="btn btn-primary">Print Report</button>
+  {% if user.is_staff %}
+  <a href="{% url 'manage_requests' %}" class="btn btn-secondary">Back</a>
+  {% else %}
+  <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">Back</a>
+  {% endif %}
+</div>
+</div>
+</body>
+</html>

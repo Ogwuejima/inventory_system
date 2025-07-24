@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<h1>User Dashboard</h1>
+<div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Inventory Report</h4>
+      </div>
+      <div class="card-body">
+
+<table class="table table-bordered table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Date Requested</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in requests %}
+    <tr>
+      <td>{{ request.item.name }}</td>
+      <td>{{ request.quantity }}</td>
+      <td>{{ request.created_at|date:"d M Y H:i" }}</td>
+      <td>{{ request.status|capfirst }}</td>
+      <td>
+          <a href="{% url 'print_request_report' request.id %}" class="btn btn-primary btn-sm" target="_blank">
+            <i class="fa-solid fa-print"></i>
+          </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" class="text-center">No requests found</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+<!-- ✅ Real-time WebSocket Notification Script -->
+<script>
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        alert(data.title + ": " + data.body);  // Replace with a toast or modal if preferred
+    };
+
+    socket.onclose = function(e) {
+        console.error('WebSocket closed unexpectedly');
+    };
+</script>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Manage Requests</h4>
+      </div>
+      <div class="card-body">
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Requester</th>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Request Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in requests %}
+      <tr>
+        <td>{{ req.requester.username }}</td>
+        <td>{{ req.item.name }}</td>
+        <td>{{ req.quantity }}</td>
+        <td>{{ req.created_at|date:"Y-m-d H:i" }}</td>
+        <td>{{ req.status }}</td>
+        <td>
+          {% if req.status == 'pending' %}
+          <a href="{% url 'approve_request' req.id %}" class="btn btn-success btn-sm">Approve</a>
+          <a href="{% url 'reject_request' req.id %}" class="btn btn-danger btn-sm">Reject</a>
+          {% else %}
+          <a href="{% url 'print_request_report' req.id %}" class="btn btn-primary btn-sm" target="_blank">
+  <i class="fa-solid fa-print"></i></a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+    <tr><td colspan="6" class="text-center">No requests found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+{% endblock %}

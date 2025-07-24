@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+<div class="row">
+  <div class="col-md-3">
+    <div class="card text-white bg-primary mb-3">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-box-seam display-5 me-3"></i>
+        <div>
+          <h5>Total Inventory Items</h5>
+          <p class="fs-3">{{ total_items }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-3">
+    <div class="card text-white bg-warning mb-3">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-journal-text display-5 me-3"></i>
+        <div>
+          <h5>Total Requests</h5>
+          <p class="fs-3">{{ total_requests }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-white bg-danger mb-3">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-clock-history display-5 me-3"></i>
+        <div>
+          <h5>Pending Requests</h5>
+          <p class="fs-3">{{ pending_requests }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-white bg-success mb-3">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-people display-5 me-3"></i>
+        <div>
+          <h5>Total Users</h5>
+          <p class="fs-3">{{ total_users }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
